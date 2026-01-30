@@ -14,8 +14,7 @@ game = "running"
 #############################
 
 #CARS
-car_1 = pygame.image.load(r"assets\cars\car_player1.png")
-
+car_1 = pygame.image.load(r"C:\Users\naqeeb.rahmani\Desktop\ProfilVecka(2026)\Racing_game\assets\cars\car_player1.png")
 ########################
 
 pygame.init()
