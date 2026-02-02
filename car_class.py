@@ -15,14 +15,17 @@ class Car:
         self.original_sprite = sprite
         self.sprite = sprite
 
+        self.rect = self.sprite.get_rect(center=(self.car_x, self.car_y))
+
+
     def rotation(self):
         if self.direction == 1:
             self.angle -= self.rotating_speed
         elif self.direction == -1:
             self.angle += self.rotating_speed
 
-        self.sprite = pygame.transform.rotozoom(self.sprite, self.angle, 1)
+        self.sprite = pygame.transform.rotozoom(self.original_sprite, self.angle, 1)
 
 
     def update(self):
-        self.set_rotation()
+        self.rotation()
