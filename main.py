@@ -32,8 +32,9 @@ game = "running"
 
 #CARS
 
-car_1 = car_class.Car(SCREEN_WIDTH, SCREEN_HEIGHT, pygame.image.load(r"assets\cars\car_1_top.png")
-)
+car_1_sprite = pygame.image.load(r"assets\cars\car_1_top.png").convert_alpha()
+
+car_1 = car_class.Car(SCREEN_WIDTH, SCREEN_HEIGHT, car_1_sprite)
 
 #car_1 = pygame.image.load(r"assets\cars\car_player1.png")
 
@@ -59,7 +60,7 @@ while game == "running":
         car_1.car_x = car_1.car_x - car_1.speed
 
     if keys[pygame.K_RIGHT] and car_1.car_x < (SCREEN_WIDTH - 64):
-        car_1.car_x = car_1.car_x + car_1.speed
+        car_1.direction += 1
 
     if keys[pygame.K_DOWN] and car_1.car_y < (SCREEN_HEIGHT - 64):
         car_1.car_y = car_1.car_y + car_1.speed
@@ -67,6 +68,8 @@ while game == "running":
     if keys[pygame.K_UP] and car_1.car_y > 0:
         car_1.car_y = car_1.car_y - car_1.speed
 
+    car_class.Car.rotation(car_1)
+    car_class.Car.update(car_1)
 
     screen.fill((0,0,0,))
     #test
