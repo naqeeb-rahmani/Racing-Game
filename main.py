@@ -21,7 +21,7 @@ clock = pygame.time.Clock()
 ##################################
 
 #TEST BACKGROUND
-bg_test = pygame.image.load(r"assets\tiles\testbana.png")
+bg_test = pygame.image.load("base_bana.png")
 
 ###################
 
