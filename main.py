@@ -68,8 +68,8 @@ while game == "running":
     if keys[pygame.K_UP] and car_1.car_y > 0:
         car_1.car_y = car_1.car_y - car_1.speed
 
-    car_class.Car.rotation(car_1)
-    car_class.Car.update(car_1)
+    car_1.rotation()
+    car_1.update()
 
     screen.fill((0,0,0,))
     #test
@@ -77,7 +77,7 @@ while game == "running":
     screen.blit(bg_test, (0,0))
 
 #################
-    screen.blit(car_1.sprite, (car_1.car_x, car_1.car_y))
+    #screen.blit(car_1.sprite, (car_1.car_x, car_1.car_y))
 
 
     pygame.display.update()
