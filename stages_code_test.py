@@ -4,6 +4,7 @@ import pygame, sys, car_class
 #Блят продукция partners & co
 
 pygame.init()
+pygame.mixer.init()
 
 #Day 1: Get atleast 1 car, which should be able to move 
 #Day 2:
@@ -16,7 +17,11 @@ SCREEN_HEIGHT = 720
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+menu_music = (r"C:\Users\tor.blom\Racing-Game\assets\audio\music\Blippy Trance.mp3")
+main_music = (r"C:\Users\tor.blom\Racing-Game\assets\audio\music\Shenyang.mp3")
 
+pygame.mixer.music.load(main_music)
+pygame.mixer.music.play()
 
 clock = pygame.time.Clock()
 ##################################
@@ -46,7 +51,7 @@ car_speed = 10
 
 class GameState():
     def __init__(self):
-        self.state = "main_game"
+        self.state = "menu"
 
     def menu(self):
         for event in pygame.event.get():
@@ -54,7 +59,12 @@ class GameState():
                 pygame.quit()
                 sys.exit()
         screen.blit(bg_test, (0, 0))
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            self.state = "main_game"
+                
         pygame.display.update()
+
 
     def main_game(self):
         for event in pygame.event.get():
@@ -93,6 +103,6 @@ pygame.display.set_caption("汽车联盟 (Chinatown)")
 game_state = GameState()
 
 while game:
-    game_state.menu()
+    game_state.state_manager()
 
     clock.tick(60)
