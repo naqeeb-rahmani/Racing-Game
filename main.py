@@ -5,7 +5,7 @@ import car_class
 #Блят продукция partners & co
 
 #Day 1: Get atleast 1 car, which should be able to move 
-#Day 2:
+#Day 2: Create a class for the cars
 
 #SCREEN
 SCREEN_WIDTH = 1280
@@ -57,7 +57,7 @@ while game == "running":
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_LEFT] and car_1.car_x > 0:
-        car_1.car_x = car_1.car_x - car_1.speed
+        car_1.direction -= 1
 
     if keys[pygame.K_RIGHT] and car_1.car_x < (SCREEN_WIDTH - 64):
         car_1.direction += 1
@@ -77,7 +77,7 @@ while game == "running":
     screen.blit(bg_test, (0,0))
 
 #################
-    #screen.blit(car_1.sprite, (car_1.car_x, car_1.car_y))
+    screen.blit(car_1.sprite, (car_1.car_x, car_1.car_y))
 
 
     pygame.display.update()
