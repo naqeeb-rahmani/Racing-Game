@@ -49,12 +49,12 @@ class GameState():
         self.state = "main_game"
 
     def menu(self):
-        screen.blit(bg_test, (0, 0))
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            
+        screen.blit(bg_test, (0, 0))
+        pygame.display.update()
 
     def main_game(self):
         for event in pygame.event.get():
@@ -81,8 +81,8 @@ class GameState():
         pygame.display.update()
 
     def state_manager(self):
-        if self.state == "intro":
-            self.intro()
+        if self.state == "menu":
+            self.menu()
         if self.state == "main_game":
             self.main_game()
         
