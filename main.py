@@ -1,8 +1,11 @@
 import pygame, time
 import car_class
 
+#爱泼斯坦制片公司tm
+#Блят продукция partners & co
 
 #Day 1: Get atleast 1 car, which should be able to move 
+#Day 2:
 
 #SCREEN
 SCREEN_WIDTH = 1280
@@ -29,7 +32,7 @@ game = "running"
 
 #CARS
 
-car_1 = car_class.Car(SCREEN_WIDTH, SCREEN_HEIGHT, pygame.image.load(r"assets\cars\car_player1.png")
+car_1 = car_class.Car(SCREEN_WIDTH, SCREEN_HEIGHT, pygame.image.load(r"assets\cars\car_1_top.png")
 )
 
 #car_1 = pygame.image.load(r"assets\cars\car_player1.png")
@@ -38,12 +41,12 @@ car_1_x = 100
 car_1_y = 100
 
 car_speed = 10
- ########################
+########################
 
 pygame.init()
 
 
-pygame.display.set_caption("Racing-Game")
+pygame.display.set_caption("汽车联盟 (Chinatown)")
 
 
 
@@ -58,10 +61,10 @@ while game == "running":
     if keys[pygame.K_RIGHT] and car_1.car_x < (SCREEN_WIDTH - 64):
         car_1.car_x = car_1.car_x + car_1.speed
 
-    if keys[pygame.K_DOWN] and car_1_y < (SCREEN_HEIGHT - 64):
+    if keys[pygame.K_DOWN] and car_1.car_y < (SCREEN_HEIGHT - 64):
         car_1.car_y = car_1.car_y + car_1.speed
 
-    if keys[pygame.K_UP] and car_1_y > 0:
+    if keys[pygame.K_UP] and car_1.car_y > 0:
         car_1.car_y = car_1.car_y - car_1.speed
 
 
@@ -83,5 +86,3 @@ while game == "running":
             game = "not running"
 
 exit()
-
-        
