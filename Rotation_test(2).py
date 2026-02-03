@@ -59,10 +59,12 @@ while game == "running":
     keys = pygame.key.get_pressed()
 
     if keys[pygame.K_DOWN] and car_1.car_y < (SCREEN_HEIGHT - 64):
-        car_1.car_y = car_1.car_y + car_1.speed
+        #car_1.car_y = car_1.car_y + car_1.speed
+        pass
 
     if keys[pygame.K_UP] and car_1.car_y > 0:
-        car_1.car_y = car_1.car_y - car_1.speed
+        car_1.movement()
+         #car_1.car_y = car_1.car_y - car_1.speed
 
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
