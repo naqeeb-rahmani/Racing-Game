@@ -13,6 +13,8 @@ SCREEN_HEIGHT = 720
 
 #screen = (pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)))
 
+pygame.init()
+
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),
 
 pygame.SCALED | pygame.FULLSCREEN)
@@ -44,7 +46,6 @@ car_1_y = 100
 car_speed = 10
 ########################
 
-pygame.init()
 
 
 pygame.display.set_caption("汽车联盟 (Chinatown)")
@@ -64,17 +65,20 @@ while game == "running":
         car_1.car_y = car_1.car_y - car_1.speed
 
     for event in pygame.event.get():
-        if event.type == pygame.KEYDOWN:    
-            if event.key == pygame.K_RIGHT: car_1.direction = -1
-            if event.key == pygame.K_LEFT: car_1.direction = 1
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT: car_1.direction = 1
+            if event.key == pygame.K_LEFT: car_1.direction = -1
         
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT: car_1.direction = 0
             if event.key == pygame.K_LEFT: car_1.direction = 0
 
+        if event.type == pygame.QUIT:
+            game = "not running"
 
 
-    car_1.rotation()
+
+    car_1.update()
 #    car_1.update()
 
     screen.fill((0,0,0,))
@@ -83,15 +87,12 @@ while game == "running":
     screen.blit(bg_test, (0,0))
 
 #################
-    screen.blit(car_1.sprite, (car_1.car_x, car_1.car_y))
+    screen.blit(car_1.sprite, car_1.rect)
+
 
 
     pygame.display.update()
 
     clock.tick(60)
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            game = "not running"
 
 exit()
