@@ -1,11 +1,8 @@
 import pygame, sys, car_class
 
-#爱泼斯坦制片公司tm
-#Блят продукция partners & co
 
 pygame.init()
 pygame.mixer.init()
-pygame.freetype.get_init()
 
 my_font = pygame.font.SysFont('Comic Sans MS', 30)
 
@@ -41,7 +38,16 @@ bg_test = pygame.image.load("base_bana.png")
 
 ################### Texts
 
+# Colors
+BLACK = (0, 0, 0)
+WHITE = (255, 255, 255)
+GREEN = (0, 255, 0)
+YELLOW = (255, 255, 0)
 
+# Menu states
+options = ["Start", "Multiplayer", "Credits", "Quit"]
+selected = 0
+show_credits = False
 #STATES
 game = True
 #############################
@@ -63,27 +69,122 @@ class GameState():
     def __init__(self):
         self.state = "menu"
 
-    
+    # Menu states
+    options = ["Start", "Multiplayer", "Credits", "Quit"]
+    selected = 0
+    show_credits = False
 
     def menu(self):
+        pygame.display.set_caption("Simple Menu")
+        screen.fill(BLACK)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        screen.fill((255,255,255))
 
-        draw_text("Press enter or space to start game.", text_font, (0, 0, 0), 500, 300)  
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_RETURN] or keys[pygame.K_SPACE]:
-            self.state = "main_game"
-            pygame.mixer.music.unload()
-            pygame.mixer.music.load(main_music)
-            pygame.mixer.music.play()
-        
+            if event.type == pygame.KEYDOWN:
+                if self.show_credits:
+                    if event.key in (pygame.K_ESCAPE, pygame.K_RETURN):
+                        self.show_credits = False
+                else:
+                    if event.key == pygame.K_UP:
+                        self.selected = (self.selected - 1) % len(self.options)
+                    elif event.key == pygame.K_DOWN:
+                        self.selected = (self.selected + 1) % len(self.options)
+                    elif event.key == pygame.K_RETURN:
+                        if self.selected == 0:
+                            self.state = "main_game"
+                        elif self.selected == 2:
+                            self.show_credits = True
+                        elif self.selected == 3:
+                            pygame.quit()
+                            sys.exit()
+
+        if self.show_credits:
+            font = pygame.font.SysFont(None, 80)
+            title = font.render("CREDITS", True, YELLOW)
+            screen.blit(title, (280, 100))
+
+            font = pygame.font.SysFont(None, 50)
+            names = ["Made by:", "", "Naqeeb", "Reem", "Tor", "", "Press ESC to go back"]
+            for i, name in enumerate(names):
+                color = GREEN if name in ["Naqeeb", "Reem", "Tor"] else WHITE
+                text = font.render(name, True, color)
+                screen.blit(text, (320, 200 + i * 50))
+        else:
+            font = pygame.font.SysFont(None, 80)
+            title = font.render("RACE GAME", True, GREEN)
+            screen.blit(title, (250, 100))
+
+            font = pygame.font.SysFont(None, 60)
+            for i, option in enumerate(self.options):
+                color = GREEN if i == self.selected else WHITE
+                text = font.render(option, True, color)
+                screen.blit(text, (300, 220 + i * 70))
+
         pygame.display.update()
+    '''def menu(self):
+
+        pygame.display.set_caption("Simple Menu")
+        screen.fill((BLACK))
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                if self.show_credits:
+                    if event.key == pygame.K_ESCAPE or event.key == pygame.K_RETURN:
+                        self.show_credits = False
+                else:
+                    if event.key == pygame.K_UP:
+                        self.selected = (self.selected - 1) % 4
+                    elif event.key == pygame.K_DOWN:
+                        self.selected = (self.selected + 1) % 4
+                    elif event.key == pygame.K_RETURN:
+                        if self.selected == 0:
+                            print("Start Game")
+                        elif self.selected == 1:
+                            print("Multiplayer")
+                        elif self.selected == 2:
+                            self.show_credits = True
+                        elif self.selected == 3:
+                            pygame.quit()
+                            sys.exit()
+    
+        if self.show_credits:
+        # Draw credits screen
+                font = pygame.font.SysFont(None, 80)
+                title = font.render("CREDITS", True, YELLOW)
+                screen.blit(title, (280, 100))
+                
+                font = pygame.font.SysFont(None, 50)
+                names = ["Made by:", "", "Naqeeb", "Reem", "Tor", "", "Press ESC to go back"]
+                
+                for i, name in enumerate(names):
+                    color = GREEN if name in ["Naqeeb", "Reem", "Tor"] else WHITE
+                    text = font.render(name, True, color)
+                    screen.blit(text, (320, 200 + i * 50))
+        else:
+        # Draw main menu
+                    font = pygame.font.SysFont(None, 80)
+                    title = font.render("RACE GAME", True, GREEN)
+                    screen.blit(title, (250, 100))
+                
+                # Draw menu options
+                    font = pygame.font.SysFont(None, 60)
+        for i, option in enumerate(self.options):
+                    color = GREEN if i == selected else WHITE
+                    text = font.render(option, True, color)
+                    screen.blit(text, (300, 220 + i * 70))
+
+        pygame.display.update()'''
+
+
 
 
     def main_game(self):
+        pygame.display.set_caption("汽车联盟 (Chinatown)")
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
