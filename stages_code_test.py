@@ -1,10 +1,9 @@
-import pygame, sys, car_class
+import pygame, sys
+import car_class
 
 
 pygame.init()
 pygame.mixer.init()
-
-my_font = pygame.font.SysFont('Comic Sans MS', 30)
 
 #Day 1: Get atleast 1 car, which should be able to move 
 #Day 2:
@@ -16,13 +15,6 @@ SCREEN_HEIGHT = 720
 #screen = (pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)))
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-
-text_font = pygame.font.SysFont("Arial", 30)
-
-
-def draw_text(text, font, text_col, x, y):
-        img = font.render(text, True, text_col)
-        screen.blit(img, (x, y))
 
 menu_music = (r"C:\Users\tor.blom\Racing-Game\assets\audio\music\Blippy Trance.mp3")
 main_music = (r"C:\Users\tor.blom\Racing-Game\assets\audio\music\Shenyang.mp3")
@@ -54,8 +46,9 @@ game = True
 
 #CARS
 
-car_1 = car_class.Car(SCREEN_WIDTH, SCREEN_HEIGHT, pygame.image.load(r"assets\cars\car_1_top.png")
-)
+car_1_sprite = pygame.image.load(r"assets\cars\car_1_top.png").convert_alpha()
+
+car_1 = car_class.Car(SCREEN_WIDTH, SCREEN_HEIGHT, car_1_sprite)
 
 #car_1 = pygame.image.load(r"assets\cars\car_player1.png")
 
@@ -127,27 +120,47 @@ class GameState():
 
     def main_game(self):
         pygame.display.set_caption("汽车联盟 (Chinatown)")
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and car_1.car_x > 0:
-            car_1.car_x = car_1.car_x - car_1.speed
-
-        if keys[pygame.K_RIGHT] and car_1.car_x < (SCREEN_WIDTH - 64):
-            car_1.car_x = car_1.car_x + car_1.speed
 
         if keys[pygame.K_DOWN] and car_1.car_y < (SCREEN_HEIGHT - 64):
-            car_1.car_y = car_1.car_y + car_1.speed
+            #car_1.car_y = car_1.car_y + car_1.speed
+            pass
 
         if keys[pygame.K_UP] and car_1.car_y > 0:
-            car_1.car_y = car_1.car_y - car_1.speed
+            car_1.movement()
+            #car_1.car_y = car_1.car_y - car_1.speed
 
-        screen.blit(bg_test, (0,0))
-        screen.blit(car_1.sprite, (car_1.car_x, car_1.car_y))
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT: car_1.direction = 1
+                if event.key == pygame.K_LEFT: car_1.direction = -1
+            
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_RIGHT: car_1.direction = 0
+                if event.key == pygame.K_LEFT: car_1.direction = 0
+            car_1.update()
+#    car_1.update()
 
-        pygame.display.update()
+            screen.fill((0,0,0,))
+    #test
+
+            screen.blit(bg_test, (0,0))
+
+#################
+            screen.blit(car_1.sprite, car_1.rect)
+
+
+
+            pygame.display.update()
+
+    
+
+
 
     def state_manager(self):
         if self.state == "menu":
