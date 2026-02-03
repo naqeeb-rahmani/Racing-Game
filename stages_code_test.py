@@ -5,6 +5,9 @@ import pygame, sys, car_class
 
 pygame.init()
 pygame.mixer.init()
+pygame.freetype.get_init()
+
+my_font = pygame.font.SysFont('Comic Sans MS', 30)
 
 #Day 1: Get atleast 1 car, which should be able to move 
 #Day 2:
@@ -17,10 +20,17 @@ SCREEN_HEIGHT = 720
 
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+text_font = pygame.font.SysFont("Arial", 30)
+
+
+def draw_text(text, font, text_col, x, y):
+        img = font.render(text, True, text_col)
+        screen.blit(img, (x, y))
+
 menu_music = (r"C:\Users\tor.blom\Racing-Game\assets\audio\music\Blippy Trance.mp3")
 main_music = (r"C:\Users\tor.blom\Racing-Game\assets\audio\music\Shenyang.mp3")
 
-pygame.mixer.music.load(main_music)
+pygame.mixer.music.load(menu_music)
 pygame.mixer.music.play()
 
 clock = pygame.time.Clock()
@@ -29,7 +39,7 @@ clock = pygame.time.Clock()
 #TEST BACKGROUND
 bg_test = pygame.image.load("base_bana.png")
 
-###################
+################### Texts
 
 
 #STATES
@@ -53,16 +63,23 @@ class GameState():
     def __init__(self):
         self.state = "menu"
 
+    
+
     def menu(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-        screen.blit(bg_test, (0, 0))
+        screen.fill((255,255,255))
+
+        draw_text("Press enter or space to start game.", text_font, (0, 0, 0), 500, 300)  
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
+        if keys[pygame.K_RETURN] or keys[pygame.K_SPACE]:
             self.state = "main_game"
-                
+            pygame.mixer.music.unload()
+            pygame.mixer.music.load(main_music)
+            pygame.mixer.music.play()
+        
         pygame.display.update()
 
 
@@ -84,7 +101,6 @@ class GameState():
         if keys[pygame.K_UP] and car_1.car_y > 0:
             car_1.car_y = car_1.car_y - car_1.speed
 
-        screen.fill((0,0,0,))
         screen.blit(bg_test, (0,0))
         screen.blit(car_1.sprite, (car_1.car_x, car_1.car_y))
 
