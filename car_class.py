@@ -8,9 +8,9 @@ class Car:
 
         self.angle = 0
         self.direction = 0     #direction 1 = right, direction -1 = left and 0 means straight
-        self.rotating_speed = 10
+        self.rotating_speed = 5
 
-        self.speed = 10
+        self.speed = 5
 
         self.original_sprite = sprite
         self.sprite = self.original_sprite
@@ -30,10 +30,10 @@ class Car:
 
     def movement(self):
 
-        rad = math.radians(self.angle)
+        rad = math.radians(self.angle + 90) # +90 because it was off by 90 degrees
 
         self.car_x += (math.cos(rad) * self.speed) #speed is the hypotenuse
-        self.car_y += (math.sin(rad) * self.speed)
+        self.car_y -= (math.sin(rad) * self.speed)
     
 
     def update(self):
