@@ -56,11 +56,6 @@ pygame.display.update()
 while game == "running":
 
     keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT] and car_1.car_x > 0:
-        car_1.direction -= 1
-
-    if keys[pygame.K_RIGHT] and car_1.car_x < (SCREEN_WIDTH - 64):
-        car_1.direction += 1
 
     if keys[pygame.K_DOWN] and car_1.car_y < (SCREEN_HEIGHT - 64):
         car_1.car_y = car_1.car_y + car_1.speed
@@ -68,8 +63,19 @@ while game == "running":
     if keys[pygame.K_UP] and car_1.car_y > 0:
         car_1.car_y = car_1.car_y - car_1.speed
 
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:    
+            if event.key == pygame.K_RIGHT: car_1.direction = -1
+            if event.key == pygame.K_LEFT: car_1.direction = 1
+        
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_RIGHT: car_1.direction = 0
+            if event.key == pygame.K_LEFT: car_1.direction = 0
+
+
+
     car_1.rotation()
-    car_1.update()
+#    car_1.update()
 
     screen.fill((0,0,0,))
     #test

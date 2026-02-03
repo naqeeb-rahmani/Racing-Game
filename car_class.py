@@ -13,9 +13,9 @@ class Car:
         self.speed = 10
 
         self.original_sprite = sprite
-        self.sprite = sprite
+        self.sprite = self.original_sprite
 
-        self.rect = self.sprite.get_rect(center=(self.car_x, self.car_y))
+#        self.rect = self.sprite.get_rect(center=(self.car_x, self.car_y))
 
 
     def rotation(self):
