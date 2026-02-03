@@ -62,8 +62,8 @@ while True:
     else:
         # Draw main menu
         font = pygame.font.SysFont(None, 80)
-        title = font.render("RACE GAME", True, GREEN)
-        screen.blit(title, (250, 100))
+        title = font.render("League Of Cars", True, GREEN)
+        screen.blit(title, (200, 100))
         
         # Draw menu options
         font = pygame.font.SysFont(None, 60)

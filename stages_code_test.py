@@ -124,64 +124,6 @@ class GameState():
                 screen.blit(text, (300, 220 + i * 70))
 
         pygame.display.update()
-    '''def menu(self):
-
-        pygame.display.set_caption("Simple Menu")
-        screen.fill((BLACK))
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.KEYDOWN:
-                if self.show_credits:
-                    if event.key == pygame.K_ESCAPE or event.key == pygame.K_RETURN:
-                        self.show_credits = False
-                else:
-                    if event.key == pygame.K_UP:
-                        self.selected = (self.selected - 1) % 4
-                    elif event.key == pygame.K_DOWN:
-                        self.selected = (self.selected + 1) % 4
-                    elif event.key == pygame.K_RETURN:
-                        if self.selected == 0:
-                            print("Start Game")
-                        elif self.selected == 1:
-                            print("Multiplayer")
-                        elif self.selected == 2:
-                            self.show_credits = True
-                        elif self.selected == 3:
-                            pygame.quit()
-                            sys.exit()
-    
-        if self.show_credits:
-        # Draw credits screen
-                font = pygame.font.SysFont(None, 80)
-                title = font.render("CREDITS", True, YELLOW)
-                screen.blit(title, (280, 100))
-                
-                font = pygame.font.SysFont(None, 50)
-                names = ["Made by:", "", "Naqeeb", "Reem", "Tor", "", "Press ESC to go back"]
-                
-                for i, name in enumerate(names):
-                    color = GREEN if name in ["Naqeeb", "Reem", "Tor"] else WHITE
-                    text = font.render(name, True, color)
-                    screen.blit(text, (320, 200 + i * 50))
-        else:
-        # Draw main menu
-                    font = pygame.font.SysFont(None, 80)
-                    title = font.render("RACE GAME", True, GREEN)
-                    screen.blit(title, (250, 100))
-                
-                # Draw menu options
-                    font = pygame.font.SysFont(None, 60)
-        for i, option in enumerate(self.options):
-                    color = GREEN if i == selected else WHITE
-                    text = font.render(option, True, color)
-                    screen.blit(text, (300, 220 + i * 70))
-
-        pygame.display.update()'''
-
-
-
 
     def main_game(self):
         pygame.display.set_caption("汽车联盟 (Chinatown)")
