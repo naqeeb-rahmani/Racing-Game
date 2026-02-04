@@ -120,12 +120,12 @@ while game == "running":
     screen.blit(bg_test, (0,0))
 
 #################
-    if car_1.explosion == True and exp_sound == False:
-        screen.blit(bg_test, (0,0))
+    if car_1.explosion:
         screen.blit(t_blast, blast_rect)
-        kaboom_sound.play()
-        exp_start = pygame.time.get_ticks()
-        exp_sound = True
+        if not exp_sound:
+            kaboom_sound.play()
+            exp_start = pygame.time.get_ticks()
+            exp_sound = True
     elif exp_sound != True:
         screen.blit(car_1.sprite, car_1.rect)
 
