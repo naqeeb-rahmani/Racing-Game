@@ -4,11 +4,13 @@ import pygame, math
 class Car:
     def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, sprite):
         self.car_x = SCREEN_WIDTH / 2
-        self.car_y = SCREEN_HEIGHT / 2
+        self.car_y = (SCREEN_HEIGHT / 2) + 100
 
         self.angle = 0
         self.direction = 0     #direction 1 = right, direction -1 = left and 0 means straight
         self.rotating_speed = 5
+
+        self.rad = 0
 
         self.speed = 5
 
@@ -30,10 +32,10 @@ class Car:
 
     def movement(self):
 
-        rad = math.radians(self.angle + 90) # +90 because it was off by 90 degrees
+        self.rad = math.radians(self.angle + 90) # +90 because it was off by 90 degrees
 
-        self.car_x += (math.cos(rad) * self.speed) #speed is the hypotenuse
-        self.car_y -= (math.sin(rad) * self.speed)
+        self.car_x += (math.cos(self.rad) * self.speed) #speed is the hypotenuse
+        self.car_y -= (math.sin(self.rad) * self.speed)
     
 
     def update(self):

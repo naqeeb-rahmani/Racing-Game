@@ -4,8 +4,10 @@ import car_class
 #大斯坦制作公司tm
 #RTN продакшн
 
-#Day 1: Get atleast 1 car, which should be able to move 
-#Day 2: Create a class for the cars
+#Day 1: Get atleast 1 car, which should be able to move -done
+#Day 2: Create a class for the cars - done
+#Day 3: Fix movement - done
+#Day 4: Fix collision - work in progress
 
 #SCREEN
 SCREEN_WIDTH = 1280

@@ -1,69 +1,107 @@
-import pygame
+import pygame, time
+import car_class
+import math
 
-class Car(pygame.sprite.Sprite):
-	def __init__(self):
-		super().__init__()
-		self.original_image = pygame.image.load(r"assets\cars\car_1_top.png")
-		self.image = self.original_image
-		self.rect = self.image.get_rect(center = (640,360))
-		self.angle = 0
-		self.rotation_speed = 1.8
-		self.direction = 0
-		self.forward = pygame.math.Vector2(0,-1)
-		self.active = False
+#大斯坦制作公司tm
+#RTN продакшн
 
-	def set_rotation(self):
-		if self.direction == 1:
-			self.angle -= self.rotation_speed
-		if self.direction == -1:
-			self.angle += self.rotation_speed
+#Day 1: Get atleast 1 car, which should be able to move -done
+#Day 2: Create a class for the cars - done
+#Day 3: Fix movement - done
+#Day 4: Fix collision - work in progress
 
-		self.image = pygame.transform.rotozoom(self.original_image,self.angle,1)
-		self.rect = self.image.get_rect(center = self.rect.center)
+#SCREEN
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
 
-	def get_rotation(self):
-		if self.direction == 1:
-			self.forward.rotate_ip(self.rotation_speed)
-		if self.direction == -1:
-			self.forward.rotate_ip(-self.rotation_speed)
-
-	def accelerate(self):
-		if self.active:
-			self.rect.center += self.forward * 5
-
-	def update(self):
-		self.set_rotation()
-		self.get_rotation()
-		self.accelerate()
-
+#screen = (pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)))
 
 pygame.init()
-screen = pygame.display.set_mode((1280,720))
+
+screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT),
+
+pygame.SCALED | pygame.FULLSCREEN)
+
 clock = pygame.time.Clock()
-bg_track = pygame.image.load(r"base_bana.png")
+##################################
+
+#TEST BACKGROUND
+bg_test = pygame.image.load("base_bana.png")
+
+###################
+
+
+#STATES
+game = "running"
+#############################
+
+#CARS
+
+car_1_sprite = pygame.image.load(r"assets\cars\car_1_top.png").convert_alpha()
+
+car_1 = car_class.Car(SCREEN_WIDTH, SCREEN_HEIGHT, car_1_sprite)
+
+#car_1 = pygame.image.load(r"assets\cars\car_player1.png")
+
+car_1_x = 100
+car_1_y = 100
+
+car_speed = 10
+########################
 
 
 
-car = pygame.sprite.GroupSingle(Car())
+pygame.display.set_caption("汽车联盟 (Chinatown)")
 
 
 
-while True:
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			pygame.quit()
-		if event.type == pygame.KEYDOWN:
-			if event.key == pygame.K_RIGHT: car.sprite.direction += 1
-			if event.key == pygame.K_LEFT: car.sprite.direction -= 1
-			if event.key == pygame.K_SPACE: car.sprite.active = True
+pygame.display.update()
 
-		if event.type == pygame.KEYUP:
-			if event.key == pygame.K_RIGHT: car.sprite.direction -= 1
-			if event.key == pygame.K_LEFT: car.sprite.direction += 1 
-			if event.key == pygame.K_SPACE: car.sprite.active = False
+while game == "running":
 
-	screen.blit(bg_track,(0,0))
-	car.draw(screen)
-	car.update()
-	pygame.display.update()
-	clock.tick(60)
+    keys = pygame.key.get_pressed()
+
+    if keys[pygame.K_DOWN] and car_1.car_y < (SCREEN_HEIGHT - 64):
+        #car_1.car_y = car_1.car_y + car_1.speed
+        pass
+
+    car_1_x_int = int((math.cos(car_1.rad) * car_1.speed) + car_1.car_x)
+    car_1_y_int = int((math.sin(car_1.rad) * car_1.speed) + car_1.car_y)
+    #print(bg_test.get_at((car_1_x_int,car_1_y_int)))
+    if keys[pygame.K_UP]:
+        if bg_test.get_at((car_1_x_int,car_1_y_int)) != (255,255,255,255):
+            car_1.movement()
+         #car_1.car_y = car_1.car_y - car_1.speed
+
+    for event in pygame.event.get():
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_RIGHT: car_1.direction = 1
+            if event.key == pygame.K_LEFT: car_1.direction = -1
+        
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_RIGHT: car_1.direction = 0
+            if event.key == pygame.K_LEFT: car_1.direction = 0
+
+        if event.type == pygame.QUIT:
+            game = "not running"
+
+
+
+    car_1.update()
+#    car_1.update()
+
+    screen.fill((0,0,0,))
+    #test
+
+    screen.blit(bg_test, (0,0))
+
+#################
+    screen.blit(car_1.sprite, car_1.rect)
+
+
+
+    pygame.display.update()
+
+    clock.tick(60)
+
+exit()
