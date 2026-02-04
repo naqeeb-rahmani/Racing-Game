@@ -1,0 +1,64 @@
+import pygame
+import random
+
+pygame.init()
+screen = pygame.display.set_mode((800, 600))
+clock = pygame.time.Clock()
+
+car_x, car_y = 400, 300
+particles = []
+exploding = False
+
+running = True 
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]: car_x -= 5
+    if keys[pygame.K_RIGHT]: car_x += 5
+    if keys[pygame.K_UP]: car_y -= 5
+    if keys[pygame.K_DOWN]: car_y += 5
+    
+ 
+    if car_x < 0 or car_x > 780 or car_y < 0 or car_y > 580:
+        if not exploding:
+            exploding = True
+        
+            for _ in range(40):
+                particles.append({
+                    'x': car_x + 20,
+                    'y': car_y + 10,
+                    'vx': random.uniform(-4, 4),
+                    'vy': random.uniform(-4, 4),
+                    'life': 30
+                })
+    else:
+        exploding = False
+    
+
+    for p in particles[:]:
+        p['x'] += p['vx']
+        p['y'] += p['vy']
+        p['life'] -= 1
+        if p['life'] <= 0:
+            particles.remove(p)
+    
+
+    screen.fill((0, 100, 50))
+
+    pygame.draw.rect(screen, (100, 100, 100), (0, 0, 800, 600), 10)
+    
+
+    if not exploding:
+        pygame.draw.rect(screen, (0, 0, 255), (car_x, car_y, 40, 20))
+    
+    for p in particles:
+        pygame.draw.circle(screen, (255, 100, 0), (int(p['x']), int(p['y'])), 3)
+    
+    pygame.display.flip()
+    clock.tick(60)
+
+pygame.quit()
