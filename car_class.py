@@ -19,7 +19,7 @@ class Car:
 
         self.explosion = False
 
-        #self.rect = self.sprite.get_rect(center=(self.car_x, self.car_y))
+        self.rect = self.sprite.get_rect(center=(self.car_x, self.car_y))
 
 
     def rotation(self):
@@ -39,6 +39,9 @@ class Car:
         self.car_x += (math.cos(self.rad) * self.speed) #speed is the hypotenuse
         self.car_y -= (math.sin(self.rad) * self.speed)
     
+    def respawn(self, SCREEN_WIDTH, SCREEN_HEIGHT):
+        self.car_x = SCREEN_WIDTH / 2
+        self.car_y = (SCREEN_HEIGHT / 2) + 300
 
     def update(self):
         self.rotation()
