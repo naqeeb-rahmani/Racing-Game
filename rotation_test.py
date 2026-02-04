@@ -1,3 +1,4 @@
+
 import pygame, time
 import car_class
 import math
@@ -60,6 +61,7 @@ t_blast = pygame. transform. scale(t_blast_unscaled, (int(t_blast_unscaled.get_w
 kaboom_sound = pygame.mixer.Sound(r"assets\audio\sfx\yafonoob-oh-no-the-car-exploded-10632.mp3")
 exp_sound = False
 exp_time = 2000
+exp_start = 0
 ##########################################################33
 
 #Setting display to "汽车联盟 (Chinatown)" == League of Cars (Chinatown)
@@ -119,12 +121,12 @@ while game == "running":
 
 #################
     if car_1.explosion == True and exp_sound == False:
-        exp_start = pygame.time.get_ticks()
         screen.blit(bg_test, (0,0))
         screen.blit(t_blast, blast_rect)
         kaboom_sound.play()
+        exp_start = pygame.time.get_ticks()
         exp_sound = True
-    else:
+    elif exp_sound != True:
         screen.blit(car_1.sprite, car_1.rect)
 
     if car_1.explosion == True and exp_sound == True and ((pygame.time.get_ticks() - exp_start) > 2000):
