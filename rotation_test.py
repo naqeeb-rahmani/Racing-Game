@@ -30,6 +30,11 @@ bg_test = pygame.image.load("base_bana.png")
 
 ###################
 
+#TEST BLAST
+
+t_blast_unscaled = pygame.image.load(r"assets\kaboom.png").convert_alpha()
+t_blast = pygame. transform. scale(t_blast_unscaled, (int(t_blast_unscaled.get_width() * 0.02), int(t_blast_unscaled.get_height() * 0.02)))
+
 
 #STATES
 game = "running"
@@ -73,6 +78,9 @@ while game == "running":
             car_1.movement()
          #car_1.car_y = car_1.car_y - car_1.speed
 
+    if bg_test.get_at((car_1_x_int,car_1_y_int)) == (255,255,255,255):
+        car_1.explosion = True
+
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT: car_1.direction = 1
@@ -96,7 +104,10 @@ while game == "running":
     screen.blit(bg_test, (0,0))
 
 #################
-    screen.blit(car_1.sprite, car_1.rect)
+    if car_1.explosion == True:
+        screen.blit(t_blast, (car_1_x_int, car_1_y_int))
+    else:
+        screen.blit(car_1.sprite, car_1.rect)
 
 
 

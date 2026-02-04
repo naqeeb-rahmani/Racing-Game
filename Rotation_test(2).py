@@ -1,11 +1,14 @@
 import pygame, time
 import car_class
+import math
 
 #大斯坦制作公司tm
 #RTN продакшн
 
-#Day 1: Get atleast 1 car, which should be able to move 
-#Day 2: Create a class for the cars
+#Day 1: Get atleast 1 car, which should be able to move -done
+#Day 2: Create a class for the cars - done
+#Day 3: Fix movement - done
+#Day 4: Fix collision - work in progress
 
 #SCREEN
 SCREEN_WIDTH = 1280
@@ -26,6 +29,11 @@ clock = pygame.time.Clock()
 bg_test = pygame.image.load("base_bana.png")
 
 ###################
+
+#TEST BLAST
+
+t_blast_unscaled = pygame.image.load(r"assets\kaboom.png").convert_alpha()
+t_blast = pygame. transform. scale(t_blast_unscaled, (int(t_blast_unscaled.get_width() * 0.02), int(t_blast_unscaled.get_height() * 0.02)))
 
 
 #STATES
@@ -62,9 +70,16 @@ while game == "running":
         #car_1.car_y = car_1.car_y + car_1.speed
         pass
 
-    if keys[pygame.K_UP] and car_1.car_y > 0:
-        car_1.movement()
+    car_1_x_int = int((math.cos(car_1.rad) * car_1.speed) + car_1.car_x)
+    car_1_y_int = int((math.sin(car_1.rad) * car_1.speed) + car_1.car_y)
+    #print(bg_test.get_at((car_1_x_int,car_1_y_int)))
+    if keys[pygame.K_UP]:
+        if bg_test.get_at((car_1_x_int,car_1_y_int)) != (255,255,255,255):
+            car_1.movement()
          #car_1.car_y = car_1.car_y - car_1.speed
+
+    if bg_test.get_at((car_1_x_int,car_1_y_int)) == (255,255,255,255):
+        car_1.explosion = True
 
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
@@ -89,7 +104,10 @@ while game == "running":
     screen.blit(bg_test, (0,0))
 
 #################
-    screen.blit(car_1.sprite, car_1.rect)
+    if car_1.explosion == True:
+        screen.blit(t_blast, (car_1_x_int, car_1_y_int))
+    else:
+        screen.blit(car_1.sprite, car_1.rect)
 
 
 

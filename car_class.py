@@ -4,9 +4,9 @@ import pygame, math
 class Car:
     def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, sprite):
         self.car_x = SCREEN_WIDTH / 2
-        self.car_y = (SCREEN_HEIGHT / 2) + 100
+        self.car_y = (SCREEN_HEIGHT / 2) + 300
 
-        self.angle = 0
+        self.angle = -90
         self.direction = 0     #direction 1 = right, direction -1 = left and 0 means straight
         self.rotating_speed = 5
 
@@ -16,6 +16,8 @@ class Car:
 
         self.original_sprite = sprite
         self.sprite = self.original_sprite
+
+        self.explosion = False
 
         #self.rect = self.sprite.get_rect(center=(self.car_x, self.car_y))
 
