@@ -55,11 +55,13 @@ game = "running"
 #timer
 
 timer_bg = pygame.image.load(r"assets\ui\Timer back.png").convert_alpha()
-
 timer_bg = pygame.transform.scale(timer_bg, (150, 50))
+timer_rect = timer_bg.get_rect()
+timer_rect.x, timer_rect.y = 100, 625
 
-Timer_x_pos = 100
-Timer_y_pos = 625
+
+Timer_x_pos = timer_rect.x
+Timer_y_pos = timer_rect.y
 
 font = pygame.font.Font(None , 40)
 
@@ -166,7 +168,7 @@ while game == "running":
     screen.blit(car_1.sprite, car_1.rect)
     screen.blit(goal_start, (53,100))
     screen.blit(timer_bg, (Timer_x_pos,Timer_y_pos))
-    write_text("Time", (255,255,255), Timer_x_pos, Timer_y_pos)
+    write_text("Time", (255,255,255), timer_rect.x + 35, timer_rect.y +13)
 
     car_1.respawn(SCREEN_WIDTH, SCREEN_HEIGHT)
     
