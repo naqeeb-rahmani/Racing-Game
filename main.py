@@ -32,6 +32,19 @@ FPS = 60
 #TEST MAP
 bg_test = pygame.image.load("base_bana.png")
 
+#start/finish line
+
+goal_start = pygame.image.load(r"assets/tiles/goal.png").convert_alpha()
+goal_start_rect = goal_start.get_rect()
+goal_start_rect.center = (170 // 2, 170 // 2)
+
+second_trig = pygame.image.load(r"assets/tiles/second_trig.png").convert_alpha()
+second_trig_rect = second_trig.get_rect()
+second_trig_rect.center = (170 // 2, 170 // 2)
+
+laps = 0
+count_laps = False
+
 ###################
 
 #STATES
@@ -88,7 +101,8 @@ while game == "running":
 
     if bg_test.get_at((car_1_x_int,car_1_y_int)) == (255,255,255,255):
         car_1.explosion = True
-    
+
+
     #if bg_test.get_at((car_1_x_int,car_1_y_int)) == 
 #Car rotation, rotates when key is held down
     for event in pygame.event.get():
@@ -109,7 +123,7 @@ while game == "running":
 
 
     car_1.update()
-#    car_1.update()
+    car_1.slow_grass()
 
     blast_rect = t_blast.get_rect(center=car_1.rect.center)
 
@@ -117,9 +131,23 @@ while game == "running":
     #test
 
     screen.blit(bg_test, (0,0))
+    screen.blit(second_trig, (980, 320))
+
+    #laps
+    distance = pygame.Vector2(car_1.rect.center).distance_to(pygame.Vector2(goal_start_rect.center))
+
+    if distance > 500:
+        count_laps = True
+
+    if car_1.rect.colliderect(goal_start_rect) and count_laps:
+        laps += 1
+        count_laps = False
+        print(laps)
+    
 
 #################
     if car_1.explosion:
+        screen.blit(goal_start, (30,100))
         screen.blit(t_blast, blast_rect)
         if not exp_sound:
             kaboom_sound.play()
@@ -127,6 +155,7 @@ while game == "running":
             exp_sound = True
     elif exp_sound != True:
         screen.blit(car_1.sprite, car_1.rect)
+        screen.blit(goal_start, (30,100))
 
     if car_1.explosion == True and exp_sound == True and ((pygame.time.get_ticks() - exp_start) > 2000):
         #spawnar bilen igen, ändrar rotation till korrekt rotation för startpositionen.

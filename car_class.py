@@ -1,6 +1,8 @@
 
 import pygame, math
 
+bg_test = pygame.image.load(r"assets\tiles\Base road plus grass.png")
+
 class Car:
     def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, sprite):
         self.car_x = SCREEN_WIDTH / 2
@@ -45,3 +47,17 @@ class Car:
 
     def update(self):
         self.rotation()
+
+    def slow_grass(self, bg_test):
+        self.rad = math.radians(self.angle + 90)
+        x = int((self.car_x + (math.cos(self.rad) * self.speed)))
+        y = int((self.car_y - (math.sin(self.rad) * self.speed)))
+
+        if bg_test.get_at((x, y)) == (161, 218, 81, 255):
+            self.speed = 2
+            self.rotating_speed = 2
+        elif bg_test.get_at((x, y)) != (161, 218, 81, 255):
+            self.speed = 5
+            self.rotating_speed = 5
+            
+        
