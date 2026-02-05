@@ -60,6 +60,15 @@ timer_bg = pygame.transform.scale(timer_bg, (200, 100))
 Timer_x_pos = 980
 Timer_y_pos = 625
 
+timer_font = pygame.font.Font()
+
+font = pygame.font.Font(None , 70)
+
+
+def write_text(text, text_colour, x, y):
+    text = font.render(text, True, text_colour)
+    screen.blit(text, (x, y))
+
 ###################
 
 #Create car sprite and car class
@@ -88,7 +97,7 @@ exp_start = 0
 ##########################################################33
 
 #Setting display to "汽车联盟 (Chinatown)" == League of Cars (Chinatown)
-pygame.display.set_caption("汽车联盟 (Chinatown)")
+pygame.display.set_caption("League Of Cars (Chinatown)")
 
 #Game loop
 
@@ -157,7 +166,6 @@ while game == "running":
 #################
     if car_1.explosion:
         screen.blit(goal_start, (53,100))
-        screen.blit(timer_bg, (Timer_x_pos, Timer_y_pos))
         screen.blit(t_blast, blast_rect)
         if not exp_sound:
             kaboom_sound.play()
@@ -167,6 +175,7 @@ while game == "running":
         screen.blit(car_1.sprite, car_1.rect)
         screen.blit(goal_start, (53,100))
         screen.blit(timer_bg, (Timer_x_pos,Timer_y_pos))
+        write_text("Time", (255,255,255), Timer_x_pos, Timer_y_pos)
 
     if car_1.explosion == True and exp_sound == True and ((pygame.time.get_ticks() - exp_start) > 2000):
         #spawnar bilen igen, ändrar rotation till korrekt rotation för startpositionen.
