@@ -5,10 +5,9 @@ bg_test = pygame.image.load(r"assets\tiles\Base road plus grass.png")
 
 class Car:
     def __init__(self, SCREEN_WIDTH, SCREEN_HEIGHT, sprite):
-        self.car_x = SCREEN_WIDTH / 2
-        self.car_y = (SCREEN_HEIGHT / 2) + 300
-
-        self.angle = -90
+        self.car_x = 100
+        self.car_y = 200
+        self.angle = 180
         self.direction = 0     #direction 1 = right, direction -1 = left and 0 means straight
         self.rotating_speed = 5
 
@@ -18,8 +17,6 @@ class Car:
 
         self.original_sprite = sprite
         self.sprite = self.original_sprite
-
-        self.explosion = False
 
         self.rect = self.sprite.get_rect(center=(self.car_x, self.car_y))
 
@@ -42,8 +39,12 @@ class Car:
         self.car_y -= (math.sin(self.rad) * self.speed)
     
     def respawn(self, SCREEN_WIDTH, SCREEN_HEIGHT):
-        self.car_x = SCREEN_WIDTH / 2
-        self.car_y = (SCREEN_HEIGHT / 2) + 300
+        if (self.car_x > (SCREEN_WIDTH -10)) or (self.car_x < (SCREEN_WIDTH - (SCREEN_WIDTH - 10))) or (self.car_y > (SCREEN_HEIGHT -10)) or (self.car_y < ( SCREEN_HEIGHT - (SCREEN_HEIGHT - 10))):
+            self.car_x = 100
+            self.car_y = 200
+            self.angle = 180
+        #self.car_x = SCREEN_WIDTH / 2
+        #self.car_y = (SCREEN_HEIGHT / 2) + 300
 
     def update(self):
         self.rotation()

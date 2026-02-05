@@ -8,7 +8,8 @@ import math
 #Day 1: Get atleast 1 car, which should be able to move -done
 #Day 2: Create a class for the cars - done
 #Day 3: Fix movement - done
-#Day 4: Fix collision - work in progress
+#Day 4: Fix collision - done
+#Day 5: Fixed the car so it slows done when driving on the grass and fixing the gui, as well as menu - in progress...
 
 #SCREEN
 SCREEN_WIDTH = 1280
@@ -55,14 +56,12 @@ game = "running"
 
 timer_bg = pygame.image.load(r"assets\ui\Timer back.png").convert_alpha()
 
-timer_bg = pygame.transform.scale(timer_bg, (200, 100))
+timer_bg = pygame.transform.scale(timer_bg, (150, 50))
 
-Timer_x_pos = 980
+Timer_x_pos = 100
 Timer_y_pos = 625
 
-timer_font = pygame.font.Font()
-
-font = pygame.font.Font(None , 70)
+font = pygame.font.Font(None , 40)
 
 
 def write_text(text, text_colour, x, y):
@@ -71,7 +70,7 @@ def write_text(text, text_colour, x, y):
 
 ###################
 
-#Create car sprite and car class
+    #Create car sprite and car class
 car_1_sprite = pygame.image.load(r"assets\cars\car_1_top.png").convert_alpha()
 car_1 = car_class.Car(SCREEN_WIDTH, SCREEN_HEIGHT, car_1_sprite)
 #car_1 = pygame.image.load(r"assets\cars\car_player1.png")
@@ -164,24 +163,13 @@ while game == "running":
     
 
 #################
-    if car_1.explosion:
-        screen.blit(goal_start, (53,100))
-        screen.blit(t_blast, blast_rect)
-        if not exp_sound:
-            kaboom_sound.play()
-            exp_start = pygame.time.get_ticks()
-            exp_sound = True
-    elif exp_sound != True:
-        screen.blit(car_1.sprite, car_1.rect)
-        screen.blit(goal_start, (53,100))
-        screen.blit(timer_bg, (Timer_x_pos,Timer_y_pos))
-        write_text("Time", (255,255,255), Timer_x_pos, Timer_y_pos)
+    screen.blit(car_1.sprite, car_1.rect)
+    screen.blit(goal_start, (53,100))
+    screen.blit(timer_bg, (Timer_x_pos,Timer_y_pos))
+    write_text("Time", (255,255,255), Timer_x_pos, Timer_y_pos)
 
-    if car_1.explosion == True and exp_sound == True and ((pygame.time.get_ticks() - exp_start) > 2000):
-        #spawnar bilen igen, ändrar rotation till korrekt rotation för startpositionen.
-        car_1.angle = -90
-        car_1.respawn(SCREEN_WIDTH, SCREEN_HEIGHT)
-        car_1.explosion = False; exp_sound = False
+    car_1.respawn(SCREEN_WIDTH, SCREEN_HEIGHT)
+    
 
     pygame.display.update()
 
