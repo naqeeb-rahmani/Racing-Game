@@ -10,6 +10,14 @@ import math
 #Day 3: Fix movement - done
 #Day 4: Fix collision - done
 #Day 5: Fixed the car so it slows done when driving on the grass and fixing the gui, as well as menu - in progress...
+time_running = False
+
+
+#pygame.SCALED | pygame.FULLSCREEN)
+ 
+time_running = False
+clock = pygame.time.Clock()
+
 
 #SCREEN
 SCREEN_WIDTH = 1280
@@ -55,7 +63,7 @@ game = "running"
 #timer
 
 timer_bg = pygame.image.load(r"assets\ui\Timer back.png").convert_alpha()
-timer_bg = pygame.transform.scale(timer_bg, (150, 50))
+timer_bg = pygame.transform.scale(timer_bg, (186.7, 50))
 timer_rect = timer_bg.get_rect()
 timer_rect.x, timer_rect.y = 100, 625
 
@@ -104,6 +112,9 @@ pygame.display.set_caption("League Of Cars (Chinatown)")
 
 while game == "running":
 #shortcut for pygame.key.get_pressed()
+    if time_running == False:
+                    start_time = pygame.time.get_ticks()
+                    time_running = True
     keys = pygame.key.get_pressed()
 #Keybinds 
     if keys[pygame.K_DOWN] and car_1.car_y < (SCREEN_HEIGHT - 64):
@@ -160,6 +171,12 @@ while game == "running":
 
     if car_1.rect.colliderect(goal_start_rect) and count_laps == True:
         laps += 1
+        if time_running == True:
+                    end_time = pygame.time.get_ticks()
+                    print(f"TOTAL TIME: {(end_time-start_time) / 1000}")
+        elif time_running == False:
+                    start_time = pygame.time.get_ticks()
+                    time_running = True
         count_laps = False
         print(laps)
     
@@ -168,7 +185,8 @@ while game == "running":
     screen.blit(car_1.sprite, car_1.rect)
     screen.blit(goal_start, (53,100))
     screen.blit(timer_bg, (Timer_x_pos,Timer_y_pos))
-    write_text("Time", (255,255,255), timer_rect.x + 35, timer_rect.y +13)
+    end_time = pygame.time.get_ticks()
+    write_text(f"TIME:{(end_time-start_time) / 1000}", (255,255,255), timer_rect.x + 16, timer_rect.y +13)
 
     car_1.respawn(SCREEN_WIDTH, SCREEN_HEIGHT)
     
