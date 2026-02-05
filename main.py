@@ -14,8 +14,7 @@ import os
 #checking if there is a save file. If not create one
 if not os.path.isfile("save.txt"):
     with open("save.txt", "w") as save:
-        save.write("9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999")
-
+        save.write("9999")
 
 
 #SCREEN
@@ -31,7 +30,7 @@ screen_type = None
 
 pygame.init()
 
-os.environ['SDL_VIDEO_CENTERED'] = '1'
+os.environ['SDL_VIDEO_CENTERED'] = '1' #centers the screen if the player chooses windowed screen in the startup menu
 
 # Disable mouse cursor/visibility
 pygame.mouse.set_visible(True)
@@ -138,15 +137,38 @@ goal_start_rect.center = (170 // 2, 170 // 2)
 second_trig = pygame.image.load(r"assets/tiles/second_trig.png").convert_alpha()
 second_trig_rect = second_trig.get_rect()
 second_trig_rect.center = (999 + second_trig_rect.width // 2, 320 + second_trig_rect.height // 2)
-
-laps = 0
+lap_time = None
+lap1_time = 0
+lap2_time = 0
+lap3_time = 0
+lap_nr = 0
 count_laps = False
 
+with open("save.txt", "r") as save:
+        personal_best = float(save.readline().strip())
+
+#loading in gui (incl lap.png's)
+lap_bg = pygame.image.load(r"assets\ui\Lap back.png")
+lap_bg = pygame.transform.scale(lap_bg, (50, 50))
+lap0 = pygame.image.load(r"assets\ui\lap 0 av 3v1.png")
+lap0 = pygame.transform.scale(lap0, (50, 50))
+lap1 = pygame.image.load(r"assets\ui\lap 1 av 3v1.png")
+lap1 = pygame.transform.scale(lap1, (50, 50))
+lap2 = pygame.image.load(r"assets\ui\lap 2 av 3v1.png")
+lap2 = pygame.transform.scale(lap2, (50, 50))
+lap3 = pygame.image.load(r"assets\ui\lap 3 av 3v1.png")
+lap3 = pygame.transform.scale(lap3, (50, 50))
+
+
 #timer
+pb_bg = pygame.image.load(r"assets\ui\timer_back.png").convert_alpha() #pb = personal best
+pb_bg = pygame.transform.scale(pb_bg, (200,50))
+pb_bg_rect = pb_bg.get_rect()
+pb_bg_rect.x, pb_bg_rect.y = 0, 650
 timer_bg = pygame.image.load(r"assets\ui\timer_back.png").convert_alpha()
 timer_bg = pygame.transform.scale(timer_bg, (200, 50))
 timer_rect = timer_bg.get_rect()
-timer_rect.x, timer_rect.y = 0, 650
+timer_rect.x, timer_rect.y = 200, 650
 
 time_running = False
 
@@ -291,6 +313,7 @@ while menu:
         pygame.display.update()
         clock.tick(FPS)
 
+    #single player mode
     elif menu_choice == "Single player":
         if time_running == False:
             start_time = pygame.time.get_ticks()
@@ -320,6 +343,35 @@ while menu:
 
         car_1.slow_grass(map)
 
+        if car_1.rect.colliderect(second_trig_rect):
+            count_laps = True
+
+        if car_1.rect.colliderect(goal_start_rect) and count_laps == True:
+            lap_time = (pygame.time.get_ticks() - start_time) / 1000
+            with open("save.txt", "r") as save:
+                personal_best = float(save.readline().strip())
+            if lap_time < personal_best:
+                with open("save.txt", "w") as save:
+                    save.write(str(lap_time))
+                personal_best = lap_time
+                
+                    
+            lap_nr += 1
+            count_laps = False
+            print(lap_nr)
+            start_time = pygame.time.get_ticks()
+        if time_running == True:
+            end_time = pygame.time.get_ticks()
+            write_text(f"TIME:{lap_time}", (255,255,255), timer_rect.x + 16, timer_rect.y +13)
+        
+        elif time_running == False:
+            start_time = pygame.time.get_ticks()
+            time_running = True
+            count_laps = False
+    
+
+
+
         screen.fill((0,0,0,))
 
         screen.blit(map, (0,0))
@@ -327,9 +379,22 @@ while menu:
 
         screen.blit(car_1.sprite, car_1.rect)
         screen.blit(goal_start, (53,100))
+        screen.blit(lap_bg, (Timer_x_pos + 200, Timer_y_pos))
+        if lap_nr == 0:
+            screen.blit(lap0,(Timer_x_pos + 200, Timer_y_pos))
+        elif lap_nr == 1:
+            lap1_time = lap_time
+            screen.blit(lap1,(Timer_x_pos + 200, Timer_y_pos))
+        elif lap_nr == 2:
+            lap2_time = lap_time
+            screen.blit(lap2,(Timer_x_pos + 200, Timer_y_pos))
+        elif lap_nr == 3:
+            lap3_time = lap_time
+            screen.blit(lap3,(Timer_x_pos + 200, Timer_y_pos))
         screen.blit(timer_bg, (Timer_x_pos,Timer_y_pos))
-        end_time = pygame.time.get_ticks()
-        write_text(f"TIME:{(end_time-start_time) / 1000}", (255,255,255), timer_rect.x + 16, timer_rect.y +13)
+        write_text(f"TIME:{lap_time}", (255,255,255), timer_rect.x + 16, timer_rect.y +13)
+        screen.blit(pb_bg, (Timer_x_pos-200,Timer_y_pos)) ###########################################################################################################
+        write_text(f"PB:{personal_best}", (255,255,255), pb_bg_rect.x + 16, pb_bg_rect.y +13)
 
         car_1.respawn(SCREEN_WIDTH, SCREEN_HEIGHT)
         
@@ -339,13 +404,15 @@ while menu:
         clock.tick(FPS)
 
 
-
+    #multiplayer mode
     elif menu_choice == "Multiplayer":
         pass
 
+    #settings
     elif menu_choice == "Settings":
         pass
     
+    #credits
     elif menu_choice == "Credits":
         screen.fill((255,255,255))
         screen.blit(cred_text1, (ct1_x,ct1_y)) #ct = credits text
