@@ -7,7 +7,16 @@ import os
 #Day 2: Create a class for the cars - done
 #Day 3: Fix movement - done
 #Day 4: Fix collision - done
-#Day 5: Fixed the car so it slows done when driving on the grass and fixing the gui, as well as menu - in progress...
+#Day 5: Fixed the car so it slows done when driving on the grass and fixing the gui, as well as menu - done
+#Day 5 (after school): Made a startup menu, then a menu, and now im working on making a local .txt save file
+
+
+#checking if there is a save file. If not create one
+if not os.path.isfile("save.txt"):
+    with open("save.txt", "w") as save:
+        save.write("9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999")
+
+
 
 #SCREEN
 SCREEN_WIDTH = 1280
@@ -135,9 +144,9 @@ count_laps = False
 
 #timer
 timer_bg = pygame.image.load(r"assets\ui\timer_back.png").convert_alpha()
-timer_bg = pygame.transform.scale(timer_bg, (150, 50))
+timer_bg = pygame.transform.scale(timer_bg, (200, 50))
 timer_rect = timer_bg.get_rect()
-timer_rect.x, timer_rect.y = 100, 625
+timer_rect.x, timer_rect.y = 0, 650
 
 time_running = False
 

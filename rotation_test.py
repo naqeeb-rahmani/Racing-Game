@@ -63,7 +63,7 @@ game = "running"
 #timer
 
 timer_bg = pygame.image.load(r"assets\ui\timer_back.png").convert_alpha()
-timer_bg = pygame.transform.scale(timer_bg, (186.7, 50))
+timer_bg = pygame.transform.scale(timer_bg, (200, 50))
 timer_rect = timer_bg.get_rect()
 timer_rect.x, timer_rect.y = 100, 625
 
