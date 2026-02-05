@@ -123,7 +123,7 @@ while game == "running":
 
 
     car_1.update()
-    car_1.slow_grass()
+    car_1.slow_grass(bg_test)
 
     blast_rect = t_blast.get_rect(center=car_1.rect.center)
 
