@@ -139,6 +139,7 @@ timer_bg = pygame.transform.scale(timer_bg, (150, 50))
 timer_rect = timer_bg.get_rect()
 timer_rect.x, timer_rect.y = 100, 625
 
+time_running = False
 
 Timer_x_pos = timer_rect.x
 Timer_y_pos = timer_rect.y
@@ -262,7 +263,13 @@ while menu:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    if mouse_rect.colliderect(text5_rect):
+                    if mouse_rect.colliderect(text2_rect):
+                        menu_choice = "Single player"
+                    elif mouse_rect.colliderect(text3_rect):
+                        menu_choice = "Multiplayer"
+                    elif mouse_rect.colliderect(text4_rect):
+                        menu_choice = "Settings"
+                    elif mouse_rect.colliderect(text5_rect):
                         menu_choice = "Credits"
 
                     elif mouse_rect.colliderect(text6_rect):
@@ -276,6 +283,58 @@ while menu:
         clock.tick(FPS)
 
     elif menu_choice == "Single player":
+        if time_running == False:
+            start_time = pygame.time.get_ticks()
+            time_running = True
+
+            #movement
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP] and (car_1.car_y < SCREEN_HEIGHT):
+            car_1.movement()
+        
+        #Car rotation, rotates when key is held down
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT: car_1.direction = 1
+                if event.key == pygame.K_LEFT: car_1.direction = -1
+    #Car rotation, stops rotation when let go of key        
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_RIGHT: car_1.direction = 0
+                if event.key == pygame.K_LEFT: car_1.direction = 0
+    #end game
+            if event.type == pygame.QUIT:
+                game = "not running"
+                pygame.quit()
+                exit()
+        
+        car_1.update()
+
+        car_1.slow_grass(map)
+
+        screen.fill((0,0,0,))
+
+        screen.blit(map, (0,0))
+        screen.blit(second_trig, (999, 320))
+
+        screen.blit(car_1.sprite, car_1.rect)
+        screen.blit(goal_start, (53,100))
+        screen.blit(timer_bg, (Timer_x_pos,Timer_y_pos))
+        end_time = pygame.time.get_ticks()
+        write_text(f"TIME:{(end_time-start_time) / 1000}", (255,255,255), timer_rect.x + 16, timer_rect.y +13)
+
+        car_1.respawn(SCREEN_WIDTH, SCREEN_HEIGHT)
+        
+
+        pygame.display.update()
+
+        clock.tick(FPS)
+
+
+
+    elif menu_choice == "Multiplayer":
+        pass
+
+    elif menu_choice == "Settings":
         pass
     
     elif menu_choice == "Credits":
