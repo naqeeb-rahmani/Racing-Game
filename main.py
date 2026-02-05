@@ -41,12 +41,17 @@ game = "running"
 #Create car sprite and car class
 car_1_sprite = pygame.image.load(r"assets\cars\car_1_top.png").convert_alpha()
 car_1 = car_class.Car(SCREEN_WIDTH, SCREEN_HEIGHT, car_1_sprite)
+
+car_2_sprite = pygame.image.load(r"assets\cars\car_2_top.png").convert_alpha()
+car_2 = car_class.Car(SCREEN_WIDTH, SCREEN_HEIGHT, car_2_sprite)
 #car_1 = pygame.image.load(r"assets\cars\car_player1.png")
 
 #Car1 position
 car_1_x = 100
 car_1_y = 100
 
+car_2_x = 100
+car_2_y = 100
 #Car1 speed
 car_speed = 10
 ########################
@@ -89,16 +94,39 @@ while game == "running":
     if bg_test.get_at((car_1_x_int,car_1_y_int)) == (255,255,255,255):
         car_1.explosion = True
     
+    if keys[pygame.K_s] and car_2.car_y < (SCREEN_HEIGHT - 64):
+        #car_1.car_y = car_1.car_y + car_1.speed
+        pass
+
+    car_2_x_int = int((math.cos(car_2.rad) * car_2.speed) + car_2.car_x)
+    car_2_y_int = int((math.sin(car_2.rad) * car_2.speed) + car_2.car_y)
+    #print(bg_test.get_at((car_1_x_int,car_1_y_int)))
+
+
+    if keys[pygame.K_w] and (car_2.car_y < SCREEN_HEIGHT):
+        if bg_test.get_at((car_2_x_int,car_2_y_int)) != (255,255,255,255):
+            car_2.movement()
+         #car_1.car_y = car_1.car_y - car_1.speed
+
+    if bg_test.get_at((car_2_x_int,car_2_y_int)) == (255,255,255,255):
+        car_2.explosion = True
+    
     #if bg_test.get_at((car_1_x_int,car_1_y_int)) == 
 #Car rotation, rotates when key is held down
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RIGHT: car_1.direction = 1
             if event.key == pygame.K_LEFT: car_1.direction = -1
+            if event.key == pygame.K_d: car_2.direction = 1
+            if event.key == pygame.K_a: car_2.direction = -1
 #Car rotation, stops rotation when let go of key        
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT: car_1.direction = 0
             if event.key == pygame.K_LEFT: car_1.direction = 0
+            if event.key == pygame.K_d: car_2.direction = 0
+            if event.key == pygame.K_a: car_2.direction = 0
+
+        
 #end game
         if event.type == pygame.QUIT:
             game = "not running"
@@ -110,6 +138,7 @@ while game == "running":
 
     car_1.update()
 #    car_1.update()
+    car_2.update()
 
     blast_rect = t_blast.get_rect(center=car_1.rect.center)
 
@@ -133,6 +162,21 @@ while game == "running":
         car_1.angle = -90
         car_1.respawn(SCREEN_WIDTH, SCREEN_HEIGHT)
         car_1.explosion = False; exp_sound = False
+    
+    if car_2.explosion:
+        screen.blit(t_blast, blast_rect)
+        if not exp_sound:
+            kaboom_sound.play()
+            exp_start = pygame.time.get_ticks()
+            exp_sound = True
+    elif exp_sound != True:
+        screen.blit(car_2.sprite, car_2.rect)
+
+    if car_2.explosion == True and exp_sound == True and ((pygame.time.get_ticks() - exp_start) > 2000):
+        #spawnar bilen igen, ändrar rotation till korrekt rotation för startpositionen.
+        car_2.angle = -90
+        car_2.respawn(SCREEN_WIDTH, SCREEN_HEIGHT)
+        car_2.explosion = False; exp_sound = False
 
     pygame.display.update()
 
