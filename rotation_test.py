@@ -130,6 +130,7 @@ while game == "running":
         screen.blit(car_1.sprite, car_1.rect)
 
     if car_1.explosion == True and exp_sound == True and ((pygame.time.get_ticks() - exp_start) > 2000):
+        car_1.angle = -90
         car_1.respawn(SCREEN_WIDTH, SCREEN_HEIGHT)
         car_1.explosion = False; exp_sound = False
 
