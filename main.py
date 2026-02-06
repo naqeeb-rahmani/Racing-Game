@@ -11,6 +11,9 @@ import os
 #Day 5 (after school): Made a startup menu, then a menu, and now im working on making a local .txt save file
 
 
+
+
+
 #checking if there is a save file. If not create one
 if not os.path.isfile("save.txt"):
     with open("save.txt", "w") as save:
@@ -29,12 +32,15 @@ menu_choice = None
 screen_type = None
 
 pygame.init()
+pygame.mixer.init()
 
 os.environ['SDL_VIDEO_CENTERED'] = '1' #centers the screen if the player chooses windowed screen in the startup menu
 
 # Disable mouse cursor/visibility
 pygame.mouse.set_visible(True)
 
+# 2. Load the music file
+game_music = pygame.mixer.music.load(r"C:\Users\tor.blom\Racing-Game\assets\audio\music\menu_music.mp3")
 
 clock = pygame.time.Clock()
 FPS = 60
@@ -79,9 +85,15 @@ while startup:
     if mouse_rect.colliderect(text3_rect):
         col_t3 = (0, 0, 200)
         text3 = font.render("Fullscreen", True, col_t3)
+        # 3. Play the music (-1 means loop forever)
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(0.5)
+
     elif mouse_rect.colliderect(text4_rect):
         col_t4 = (0, 0, 200)
         text4 = font.render("Windowed fullscreen", True, col_t4)
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(0.5)
     else:
         col_t3 = (0, 0, 0); col_t4 = (0, 0, 0)
         text3 = font.render("Fullscreen", True, col_t3)
