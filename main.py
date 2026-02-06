@@ -154,15 +154,19 @@ lap0 = pygame.image.load(r"assets\ui\lap 0 av 3v1.png")
 lap0 = pygame.transform.scale(lap0, (50, 50))
 lap1 = pygame.image.load(r"assets\ui\lap 1 av 3v1.png")
 lap1 = pygame.transform.scale(lap1, (50, 50))
-lap2 = pygame.image.load(r"assets\ui\lap 2 av 3v1.png")
+lap2 = pygame.image.load(r"assets\ui\lap 2 av 3v1.png") # i did not create self.lap due to not having enough time
 lap2 = pygame.transform.scale(lap2, (50, 50))
 lap3 = pygame.image.load(r"assets\ui\lap 3 av 3v1.png")
 lap3 = pygame.transform.scale(lap3, (50, 50))
 
-#lap stats overlay after 3rd lap in single player
-overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
-overlay.set_alpha(120)
-overlay.fill((0,0,0))
+#stats after 3rd lap in single player
+font_stat = pygame.font.Font(None, 40)
+stat_text_minus1 = font_stat.render(f"Stats:", True, (255,255,255))
+stat_text0 = font.render(f"Lap 1 time: {lap1_time}", True, (255,255,255))
+stat_text1 = font.render(f"Lap 2 time: {lap2_time}", True, (255,255,255)) ##########################################################333
+stat_text2 = font.render(f"Lap 3 time: {lap3_time}", True, (255,255,255))
+stat_text3 = font.render(f"Personal Best: {personal_best}", True, (255,255,255))
+###################################################################################################################################
 
 #timer
 pb_bg = pygame.image.load(r"assets\ui\timer_back.png").convert_alpha() #pb = personal best
@@ -379,12 +383,18 @@ while menu:
 
 
         screen.fill((0,0,0,))
+        if lap_nr < 3: 
+            screen.blit(map, (0,0))
+            screen.blit(second_trig, (999, 320))
+            screen.blit(car_1.sprite, car_1.rect)
+            screen.blit(goal_start, (53,100))
+        if lap_nr >= 3:
+            screen.blit(stat_text_minus1, (550, 100))
+            screen.blit(stat_text0, (550,200))
+            screen.blit(stat_text1, (550,300))
+            screen.blit(stat_text2, (550,400))
+            screen.blit(stat_text3, (550,480))
 
-        screen.blit(map, (0,0))
-        screen.blit(second_trig, (999, 320))
-
-        screen.blit(car_1.sprite, car_1.rect)
-        screen.blit(goal_start, (53,100))
         screen.blit(lap_bg, (Timer_x_pos + 200, Timer_y_pos))
         if lap_nr == 0:
             screen.blit(lap0,(Timer_x_pos + 200, Timer_y_pos))
@@ -397,6 +407,10 @@ while menu:
         elif lap_nr == 3:
             lap3_time = lap_time
             screen.blit(lap3,(Timer_x_pos + 200, Timer_y_pos))
+            stat_text0 = font.render(f"Lap 1 time: {lap1_time}", True, (255,255,255))
+            stat_text1 = font.render(f"Lap 2 time: {lap2_time}", True, (255,255,255))
+            stat_text2 = font.render(f"Lap 3 time: {lap3_time}", True, (255,255,255))
+        
         screen.blit(timer_bg, (Timer_x_pos,Timer_y_pos))
         write_text(f"TIME:{lap_time}", (255,255,255), timer_rect.x + 16, timer_rect.y +13)
         screen.blit(pb_bg, (Timer_x_pos-200,Timer_y_pos)) ###########################################################################################################
