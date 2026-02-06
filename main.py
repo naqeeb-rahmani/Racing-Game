@@ -143,6 +143,7 @@ lap2_time = 0
 lap3_time = 0
 lap_nr = 0
 count_laps = False
+reset_laps = False
 
 with open("save.txt", "r") as save:
         personal_best = float(save.readline().strip())
@@ -261,10 +262,18 @@ def cred_animation():
 
 #########################
 
+#setting/multiplayer in dev text
+
+in_development_text = font.render(f"In development", True, (0,0,0))
+in_development_text2 = font.render(f"Coming in next update", True, (0,0,0))
+
+
+####################################
 
 while menu:
     mouse_pos = pygame.mouse.get_pos()  
     mouse_rect = pygame.Rect(mouse_pos[0], mouse_pos[1], 1, 1)
+
     if menu_choice == None:
         if mouse_rect.colliderect(text2_rect):
             col_t2 = (0, 0, 200)
@@ -377,8 +386,6 @@ while menu:
             time_running = True
             count_laps = False
     
-        #if lap_nr == 3:
-        #    screen.blit(overlay,(0,0))##################################################################
 
 
 
@@ -394,6 +401,16 @@ while menu:
             screen.blit(stat_text1, (550,300))
             screen.blit(stat_text2, (550,400))
             screen.blit(stat_text3, (550,480))
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_ESCAPE]:
+                menu_choice = None
+                lap_nr = 0
+                lap1_time = 0
+                lap2_time = 0
+                lap3_time = 0
+                lap_time = None
+                count_laps = False
+                time_running = False
 
         screen.blit(lap_bg, (Timer_x_pos + 200, Timer_y_pos))
         if lap_nr == 0:
@@ -410,7 +427,9 @@ while menu:
             stat_text0 = font.render(f"Lap 1 time: {lap1_time}", True, (255,255,255))
             stat_text1 = font.render(f"Lap 2 time: {lap2_time}", True, (255,255,255))
             stat_text2 = font.render(f"Lap 3 time: {lap3_time}", True, (255,255,255))
-        
+            stat_text3 = font.render(f"Personal Best: {personal_best}", True, (255,255,255))
+                
+
         screen.blit(timer_bg, (Timer_x_pos,Timer_y_pos))
         write_text(f"TIME:{lap_time}", (255,255,255), timer_rect.x + 16, timer_rect.y +13)
         screen.blit(pb_bg, (Timer_x_pos-200,Timer_y_pos)) ###########################################################################################################
@@ -426,11 +445,33 @@ while menu:
 
     #multiplayer mode
     elif menu_choice == "Multiplayer":
-        pass
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            menu_choice = None
+        screen.fill((255,255,255))
+        screen.blit(in_development_text, (100,100))
+        screen.blit(in_development_text2, (100,200))
+        pygame.display.update()
+        clock.tick(FPS)
 
     #settings
     elif menu_choice == "Settings":
-        pass
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            menu_choice = None
+        screen.fill((255,255,255))
+        screen.blit(in_development_text, (100,100))
+        screen.blit(in_development_text2, (100,200))
+        pygame.display.update()
+        clock.tick(FPS)
     
     #credits
     elif menu_choice == "Credits":
