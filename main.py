@@ -40,7 +40,7 @@ os.environ['SDL_VIDEO_CENTERED'] = '1' #centers the screen if the player chooses
 pygame.mouse.set_visible(True)
 
 # 2. Load the music file
-game_music = pygame.mixer.music.load(r"C:\Users\tor.blom\Racing-Game\assets\audio\music\menu_music.mp3")
+game_music = pygame.mixer.music.load(r"assets\audio\music\menu_music.mp3")
 
 clock = pygame.time.Clock()
 FPS = 60
@@ -85,15 +85,11 @@ while startup:
     if mouse_rect.colliderect(text3_rect):
         col_t3 = (0, 0, 200)
         text3 = font.render("Fullscreen", True, col_t3)
-        # 3. Play the music (-1 means loop forever)
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(0.5)
-
+        
     elif mouse_rect.colliderect(text4_rect):
         col_t4 = (0, 0, 200)
         text4 = font.render("Windowed fullscreen", True, col_t4)
-        pygame.mixer.music.play(-1)
-        pygame.mixer.music.set_volume(0.5)
+        
     else:
         col_t3 = (0, 0, 0); col_t4 = (0, 0, 0)
         text3 = font.render("Fullscreen", True, col_t3)
@@ -108,10 +104,14 @@ while startup:
                     screen_type = "Fullscreen"
                     startup = False
                     menu = True
+                    pygame.mixer.music.play(-1)
+                    pygame.mixer.music.set_volume(0.5)
                 elif mouse_rect.colliderect(text4_rect):
                     screen_type = "Windowed fullscreen"
                     startup = False
                     menu = True
+                    pygame.mixer.music.play(-1)
+                    pygame.mixer.music.set_volume(0.5)  
 
         if event.type == pygame.QUIT:
             game = "not running"
