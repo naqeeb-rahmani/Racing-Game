@@ -7,7 +7,18 @@ import os
 #Day 2: Create a class for the cars - done
 #Day 3: Fix movement - done
 #Day 4: Fix collision - done
-#Day 5: Fixed the car so it slows done when driving on the grass and fixing the gui, as well as menu - in progress...
+#Day 5: Fixed the car so it slows done when driving on the grass and fixing the gui, as well as menu - done
+#Day 5 (after school): Made a startup menu, then a menu, and now im working on making a local .txt save file
+
+
+
+
+
+#checking if there is a save file. If not create one
+if not os.path.isfile("save.txt"):
+    with open("save.txt", "w") as save:
+        save.write("9999")
+
 
 #SCREEN
 SCREEN_WIDTH = 1280
@@ -21,12 +32,15 @@ menu_choice = None
 screen_type = None
 
 pygame.init()
+pygame.mixer.init()
 
-os.environ['SDL_VIDEO_CENTERED'] = '1'
+os.environ['SDL_VIDEO_CENTERED'] = '1' #centers the screen if the player chooses windowed screen in the startup menu
 
 # Disable mouse cursor/visibility
 pygame.mouse.set_visible(True)
 
+# 2. Load the music file
+game_music = pygame.mixer.music.load(r"C:\Users\tor.blom\Racing-Game\assets\audio\music\menu_music.mp3")
 
 clock = pygame.time.Clock()
 FPS = 60
@@ -71,9 +85,15 @@ while startup:
     if mouse_rect.colliderect(text3_rect):
         col_t3 = (0, 0, 200)
         text3 = font.render("Fullscreen", True, col_t3)
+        # 3. Play the music (-1 means loop forever)
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(0.5)
+
     elif mouse_rect.colliderect(text4_rect):
         col_t4 = (0, 0, 200)
         text4 = font.render("Windowed fullscreen", True, col_t4)
+        pygame.mixer.music.play(-1)
+        pygame.mixer.music.set_volume(0.5)
     else:
         col_t3 = (0, 0, 0); col_t4 = (0, 0, 0)
         text3 = font.render("Fullscreen", True, col_t3)
@@ -129,16 +149,49 @@ goal_start_rect.center = (170 // 2, 170 // 2)
 second_trig = pygame.image.load(r"assets/tiles/second_trig.png").convert_alpha()
 second_trig_rect = second_trig.get_rect()
 second_trig_rect.center = (999 + second_trig_rect.width // 2, 320 + second_trig_rect.height // 2)
-
-laps = 0
+lap_time = None
+lap1_time = 0
+lap2_time = 0
+lap3_time = 0
+lap_nr = 0
 count_laps = False
+reset_laps = False
+
+with open("save.txt", "r") as save:
+        personal_best = float(save.readline().strip())
+
+#loading in gui (incl lap.png's)
+lap_bg = pygame.image.load(r"assets\ui\Lap back.png")
+lap_bg = pygame.transform.scale(lap_bg, (50, 50))
+lap0 = pygame.image.load(r"assets\ui\lap 0 av 3v1.png")
+lap0 = pygame.transform.scale(lap0, (50, 50))
+lap1 = pygame.image.load(r"assets\ui\lap 1 av 3v1.png")
+lap1 = pygame.transform.scale(lap1, (50, 50))
+lap2 = pygame.image.load(r"assets\ui\lap 2 av 3v1.png") # i did not create self.lap due to not having enough time
+lap2 = pygame.transform.scale(lap2, (50, 50))
+lap3 = pygame.image.load(r"assets\ui\lap 3 av 3v1.png")
+lap3 = pygame.transform.scale(lap3, (50, 50))
+
+#stats after 3rd lap in single player
+font_stat = pygame.font.Font(None, 40)
+stat_text_minus1 = font_stat.render(f"Stats:", True, (255,255,255))
+stat_text0 = font.render(f"Lap 1 time: {lap1_time}", True, (255,255,255))
+stat_text1 = font.render(f"Lap 2 time: {lap2_time}", True, (255,255,255)) ##########################################################333
+stat_text2 = font.render(f"Lap 3 time: {lap3_time}", True, (255,255,255))
+stat_text3 = font.render(f"Personal Best: {personal_best}", True, (255,255,255))
+###################################################################################################################################
 
 #timer
+pb_bg = pygame.image.load(r"assets\ui\timer_back.png").convert_alpha() #pb = personal best
+pb_bg = pygame.transform.scale(pb_bg, (200,50))
+pb_bg_rect = pb_bg.get_rect()
+pb_bg_rect.x, pb_bg_rect.y = 0, 650
 timer_bg = pygame.image.load(r"assets\ui\timer_back.png").convert_alpha()
-timer_bg = pygame.transform.scale(timer_bg, (150, 50))
+timer_bg = pygame.transform.scale(timer_bg, (200, 50))
 timer_rect = timer_bg.get_rect()
-timer_rect.x, timer_rect.y = 100, 625
+timer_rect.x, timer_rect.y = 200, 650
 
+time_running = False
 
 Timer_x_pos = timer_rect.x
 Timer_y_pos = timer_rect.y
@@ -221,10 +274,18 @@ def cred_animation():
 
 #########################
 
+#setting/multiplayer in dev text
+
+in_development_text = font.render(f"In development", True, (0,0,0))
+in_development_text2 = font.render(f"Coming in next update", True, (0,0,0))
+
+
+####################################
 
 while menu:
     mouse_pos = pygame.mouse.get_pos()  
     mouse_rect = pygame.Rect(mouse_pos[0], mouse_pos[1], 1, 1)
+
     if menu_choice == None:
         if mouse_rect.colliderect(text2_rect):
             col_t2 = (0, 0, 200)
@@ -262,7 +323,13 @@ while menu:
         for event in pygame.event.get():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
-                    if mouse_rect.colliderect(text5_rect):
+                    if mouse_rect.colliderect(text2_rect):
+                        menu_choice = "Single player"
+                    elif mouse_rect.colliderect(text3_rect):
+                        menu_choice = "Multiplayer"
+                    elif mouse_rect.colliderect(text4_rect):
+                        menu_choice = "Settings"
+                    elif mouse_rect.colliderect(text5_rect):
                         menu_choice = "Credits"
 
                     elif mouse_rect.colliderect(text6_rect):
@@ -275,9 +342,150 @@ while menu:
         pygame.display.update()
         clock.tick(FPS)
 
+    #single player mode
     elif menu_choice == "Single player":
-        pass
+        if time_running == False:
+            start_time = pygame.time.get_ticks()
+            time_running = True
+
+            #movement
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_UP] and (car_1.car_y < SCREEN_HEIGHT):
+            car_1.movement()
+        
+        #Car rotation, rotates when key is held down
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RIGHT: car_1.direction = 1
+                if event.key == pygame.K_LEFT: car_1.direction = -1
+    #Car rotation, stops rotation when let go of key        
+            if event.type == pygame.KEYUP:
+                if event.key == pygame.K_RIGHT: car_1.direction = 0
+                if event.key == pygame.K_LEFT: car_1.direction = 0
+    #end game
+            if event.type == pygame.QUIT:
+                game = "not running"
+                pygame.quit()
+                exit()
+        
+        car_1.update()
+
+        car_1.slow_grass(map)
+
+        if car_1.rect.colliderect(second_trig_rect):
+            count_laps = True
+
+        if car_1.rect.colliderect(goal_start_rect) and count_laps == True:
+            lap_time = (pygame.time.get_ticks() - start_time) / 1000
+            with open("save.txt", "r") as save:
+                personal_best = float(save.readline().strip())
+            if lap_time < personal_best:
+                with open("save.txt", "w") as save:
+                    save.write(str(lap_time))
+                personal_best = lap_time
+                
+                    
+            lap_nr += 1
+            count_laps = False
+            print(lap_nr)
+            start_time = pygame.time.get_ticks()
+        if time_running == True:
+            end_time = pygame.time.get_ticks()
+            write_text(f"TIME:{lap_time}", (255,255,255), timer_rect.x + 16, timer_rect.y +13)
+        
+        elif time_running == False:
+            start_time = pygame.time.get_ticks()
+            time_running = True
+            count_laps = False
     
+
+
+
+        screen.fill((0,0,0,))
+        if lap_nr < 3: 
+            screen.blit(map, (0,0))
+            screen.blit(second_trig, (999, 320))
+            screen.blit(car_1.sprite, car_1.rect)
+            screen.blit(goal_start, (53,100))
+        if lap_nr >= 3:
+            screen.blit(stat_text_minus1, (550, 100))
+            screen.blit(stat_text0, (550,200))
+            screen.blit(stat_text1, (550,300))
+            screen.blit(stat_text2, (550,400))
+            screen.blit(stat_text3, (550,480))
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_ESCAPE]:
+                menu_choice = None
+                lap_nr = 0
+                lap1_time = 0
+                lap2_time = 0
+                lap3_time = 0
+                lap_time = None
+                count_laps = False
+                time_running = False
+
+        screen.blit(lap_bg, (Timer_x_pos + 200, Timer_y_pos))
+        if lap_nr == 0:
+            screen.blit(lap0,(Timer_x_pos + 200, Timer_y_pos))
+        elif lap_nr == 1:
+            lap1_time = lap_time
+            screen.blit(lap1,(Timer_x_pos + 200, Timer_y_pos))
+        elif lap_nr == 2:
+            lap2_time = lap_time
+            screen.blit(lap2,(Timer_x_pos + 200, Timer_y_pos))
+        elif lap_nr == 3:
+            lap3_time = lap_time
+            screen.blit(lap3,(Timer_x_pos + 200, Timer_y_pos))
+            stat_text0 = font.render(f"Lap 1 time: {lap1_time}", True, (255,255,255))
+            stat_text1 = font.render(f"Lap 2 time: {lap2_time}", True, (255,255,255))
+            stat_text2 = font.render(f"Lap 3 time: {lap3_time}", True, (255,255,255))
+            stat_text3 = font.render(f"Personal Best: {personal_best}", True, (255,255,255))
+                
+
+        screen.blit(timer_bg, (Timer_x_pos,Timer_y_pos))
+        write_text(f"TIME:{lap_time}", (255,255,255), timer_rect.x + 16, timer_rect.y +13)
+        screen.blit(pb_bg, (Timer_x_pos-200,Timer_y_pos)) ###########################################################################################################
+        write_text(f"PB:{personal_best}", (255,255,255), pb_bg_rect.x + 16, pb_bg_rect.y +13)
+
+        car_1.respawn(SCREEN_WIDTH, SCREEN_HEIGHT)
+        
+
+        pygame.display.update()
+
+        clock.tick(FPS)
+
+
+    #multiplayer mode
+    elif menu_choice == "Multiplayer":
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            menu_choice = None
+        screen.fill((255,255,255))
+        screen.blit(in_development_text, (100,100))
+        screen.blit(in_development_text2, (100,200))
+        pygame.display.update()
+        clock.tick(FPS)
+
+    #settings
+    elif menu_choice == "Settings":
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_ESCAPE]:
+            menu_choice = None
+        screen.fill((255,255,255))
+        screen.blit(in_development_text, (100,100))
+        screen.blit(in_development_text2, (100,200))
+        pygame.display.update()
+        clock.tick(FPS)
+    
+    #credits
     elif menu_choice == "Credits":
         screen.fill((255,255,255))
         screen.blit(cred_text1, (ct1_x,ct1_y)) #ct = credits text
