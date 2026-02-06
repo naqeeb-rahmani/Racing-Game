@@ -149,12 +149,19 @@ goal_start_rect.center = (170 // 2, 170 // 2)
 second_trig = pygame.image.load(r"assets/tiles/second_trig.png").convert_alpha()
 second_trig_rect = second_trig.get_rect()
 second_trig_rect.center = (999 + second_trig_rect.width // 2, 320 + second_trig_rect.height // 2)
+third_trig = pygame.image.load(r"assets/tiles/second_trig.png").convert_alpha()
+third_trig_rect = third_trig.get_rect()
+third_trig_rect.center = (500, 300)
+
+third_trig_can_act = False
+
 lap_time = None
 lap1_time = 0
 lap2_time = 0
 lap3_time = 0
 lap_nr = 0
 count_laps = False
+count_laps2 = False
 reset_laps = False
 
 with open("save.txt", "r") as save:
@@ -374,8 +381,9 @@ while menu:
 
         if car_1.rect.colliderect(second_trig_rect):
             count_laps = True
-
-        if car_1.rect.colliderect(goal_start_rect) and count_laps == True:
+        if car_1.rect.colliderect(third_trig_rect) and count_laps == True:
+            count_laps2 = True
+        if car_1.rect.colliderect(goal_start_rect) and count_laps == True and count_laps2 == True:
             lap_time = (pygame.time.get_ticks() - start_time) / 1000
             with open("save.txt", "r") as save:
                 personal_best = float(save.readline().strip())
@@ -387,6 +395,7 @@ while menu:
                     
             lap_nr += 1
             count_laps = False
+            count_laps2 = False
             print(lap_nr)
             start_time = pygame.time.get_ticks()
         if time_running == True:
@@ -399,12 +408,9 @@ while menu:
             count_laps = False
     
 
-
-
         screen.fill((0,0,0,))
         if lap_nr < 3: 
             screen.blit(map, (0,0))
-            screen.blit(second_trig, (999, 320))
             screen.blit(car_1.sprite, car_1.rect)
             screen.blit(goal_start, (53,100))
         if lap_nr >= 3:
