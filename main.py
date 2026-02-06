@@ -45,6 +45,10 @@ game_music = pygame.mixer.music.load(r"assets\audio\music\menu_music.mp3")
 clock = pygame.time.Clock()
 FPS = 60
 
+#button clicking sound effect
+button_click_sound = pygame.mixer.Sound(r"assets\audio\sfx\button_click.mp3")
+button_click_sound.set_volume(0.5)
+
 #writing function
 
 font = pygame.font.Font(None , 30)
@@ -105,13 +109,15 @@ while startup:
                     startup = False
                     menu = True
                     pygame.mixer.music.play(-1)
-                    pygame.mixer.music.set_volume(0.5)
+                    pygame.mixer.music.set_volume(0.2)
+                    button_click_sound.play()
                 elif mouse_rect.colliderect(text4_rect):
                     screen_type = "Windowed fullscreen"
                     startup = False
                     menu = True
                     pygame.mixer.music.play(-1)
-                    pygame.mixer.music.set_volume(0.5)  
+                    pygame.mixer.music.set_volume(0.2)
+                    button_click_sound.play()  
 
         if event.type == pygame.QUIT:
             game = "not running"
@@ -331,15 +337,20 @@ while menu:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     if mouse_rect.colliderect(text2_rect):
+                        button_click_sound.play()
                         menu_choice = "Single player"
                     elif mouse_rect.colliderect(text3_rect):
+                        button_click_sound.play()
                         menu_choice = "Multiplayer"
                     elif mouse_rect.colliderect(text4_rect):
+                        button_click_sound.play()
                         menu_choice = "Settings"
                     elif mouse_rect.colliderect(text5_rect):
+                        button_click_sound.play()
                         menu_choice = "Credits"
 
                     elif mouse_rect.colliderect(text6_rect):
+                        button_click_sound.play()
                         exit()
                 
             if event.type == pygame.QUIT:
@@ -421,6 +432,7 @@ while menu:
             screen.blit(stat_text3, (550,480))
             keys = pygame.key.get_pressed()
             if keys[pygame.K_ESCAPE]:
+                button_click_sound.play()
                 menu_choice = None
                 lap_nr = 0
                 lap1_time = 0
@@ -469,6 +481,7 @@ while menu:
                 exit()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
+            button_click_sound.play()
             menu_choice = None
         screen.fill((255,255,255))
         screen.blit(in_development_text, (100,100))
@@ -484,6 +497,7 @@ while menu:
                 exit()
         keys = pygame.key.get_pressed()
         if keys[pygame.K_ESCAPE]:
+            button_click_sound.play()
             menu_choice = None
         screen.fill((255,255,255))
         screen.blit(in_development_text, (100,100))
@@ -512,6 +526,7 @@ while menu:
                 exit()
 
             if event.type == pygame.KEYDOWN:
+                button_click_sound.play()
                 if event.key == pygame.K_ESCAPE:
                     menu_choice = None
 
