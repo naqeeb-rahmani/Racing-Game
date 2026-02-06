@@ -159,6 +159,10 @@ lap2 = pygame.transform.scale(lap2, (50, 50))
 lap3 = pygame.image.load(r"assets\ui\lap 3 av 3v1.png")
 lap3 = pygame.transform.scale(lap3, (50, 50))
 
+#lap stats overlay after 3rd lap in single player
+overlay = pygame.Surface((SCREEN_WIDTH, SCREEN_HEIGHT))
+overlay.set_alpha(120)
+overlay.fill((0,0,0))
 
 #timer
 pb_bg = pygame.image.load(r"assets\ui\timer_back.png").convert_alpha() #pb = personal best
@@ -369,6 +373,8 @@ while menu:
             time_running = True
             count_laps = False
     
+        #if lap_nr == 3:
+        #    screen.blit(overlay,(0,0))##################################################################
 
 
 
