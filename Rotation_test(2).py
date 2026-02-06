@@ -22,6 +22,22 @@ screen_type = None
 
 pygame.init()
 
+# 1. Initialize the mixer
+pygame.mixer.init()
+
+# 2. Load the music file
+music = pygame.mixer.music.load(r"C:\Users\tor.blom\Racing-Game\assets\audio\music\menu_music.mp3")
+
+# 3. Play the music (-1 means loop forever)
+pygame.mixer.music.play(-1)
+
+# Set volume (0.0 to 1.0)
+pygame.mixer.music.set_volume(0.5)
+
+# (Inside your game loop)
+# pygame.mixer.music.stop() # To stop
+# pygame.mixer.music.pause() # To pause
+
 os.environ['SDL_VIDEO_CENTERED'] = '1'
 
 # Disable mouse cursor/visibility
